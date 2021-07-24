@@ -140,8 +140,4 @@ class OrdersController < ApplicationController
     params['since']
   end
 
-  def processed_orders
-
-  end
-
 end
