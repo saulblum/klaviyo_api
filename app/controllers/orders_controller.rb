@@ -12,7 +12,7 @@ class OrdersController < ApplicationController
 
   # call shopify orders api and memoize results so we don't have to call api again
   def shopify_orders
-    @orders ||= begin
+    @shopify_orders ||= begin
       url = "#{SHOPIFY_BASE_URL}/admin/api/2021-07/orders.json?status=any&financial_status=paid"
       url << "&created_at_min=#{params['since']}" if params['since']
       uri = URI(url)
