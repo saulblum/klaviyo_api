@@ -12,6 +12,14 @@ The Shopify and Klaviyo API keys are stored as environment variables (not commit
 
 ![image](https://user-images.githubusercontent.com/52899130/126854004-c83d1da9-d259-424b-8099-aaf35491194c.png)
 
+The API is authenticated by an `Authorization` header, whose value I will email:
+
+![image](https://user-images.githubusercontent.com/52899130/126854101-c748f170-217e-4546-bd70-fe5b8f1bfacb.png)
+
+Without the correct header, the API will return a 403:
+
+![image](https://user-images.githubusercontent.com/52899130/126854126-47b50690-7c3b-473a-aebd-eb42228044fc.png)
+
 **Question about the Klaviyo keys**
 
 Only the public key is needed to make the Klaviyo API calls, and the [documentation](https://help.klaviyo.com/hc/en-us/articles/115005062267-How-to-Manage-Your-Account-s-API-Keys) says, "It is safe to expose your public API key, as this key cannot be used to access data in your Klaviyo account." What would stop someone from making these "Placed Order" and "Ordered Product" calls with only the public key?
