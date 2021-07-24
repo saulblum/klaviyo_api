@@ -9,6 +9,13 @@ It takes one optional query string param `since` that adds the param `created_at
 
 ![image](https://user-images.githubusercontent.com/52899130/126853843-01242cb7-ac16-4fc0-835c-fb6a7f0ae90b.png)
 
+### How I approached the assignment
+I first read the Shopify and Klaviyo documentation and used Postman to make sample API calls. I kept getting `0` as the Klaviyo response till I realized, from the documentation examples, that I had to prefix the JSON body with `data=`.
+
+I then decided which parameters I might want to include when designing an API to sync Shopify to Klaviyo, and settled on one parameter for now, a `since` date that sets the earliest orders that Shopify will return.
+
+I created a local Rails app with an `Orders` controller and a `sync-orders` route, and deployed the app to Heroku.
+
 ### Security
 The Shopify and Klaviyo API keys are stored as environment variables (not committed to Github) and as config variables in Heroku:
 
@@ -25,8 +32,6 @@ Without the correct header, the API will return a 403:
 **Question about the Klaviyo keys**
 
 Only the public key is needed to make the Klaviyo API calls, and the [documentation](https://help.klaviyo.com/hc/en-us/articles/115005062267-How-to-Manage-Your-Account-s-API-Keys) says, "It is safe to expose your public API key, as this key cannot be used to access data in your Klaviyo account." What would stop someone from making these "Placed Order" and "Ordered Product" calls with only the public key?
-
-### How I tackled the assignment
 
 ### Enhancements
 * Pass in specific order IDs to sync between Shopify and Klaviyo
