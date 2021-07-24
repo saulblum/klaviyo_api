@@ -14,7 +14,13 @@ I first read the Shopify and Klaviyo documentation and used Postman to make samp
 
 I then decided which parameters I might want to include when designing an API to sync Shopify to Klaviyo, and settled on one parameter for now, a `since` date that sets the earliest orders that Shopify will return.
 
-I created a local Rails app with an `Orders` controller and a `sync-orders` route, and deployed the app to Heroku.
+I created a local Rails app with an `Orders` controller (`app/controllers/application_controller.rb`) and a `sync-orders` route, and deployed the app to Heroku.
+
+The controller first fetches a JSON block of Shopify orders, transforms the JSON to the format that Jlaviyo uses, and then calls the Klaviyo API.
+
+I confirmed the API worked by looking at my Klaviyo dashboard:
+
+![image](https://user-images.githubusercontent.com/52899130/126873879-fe8a1b48-aa9d-4ff0-ab97-190a1ce4d2af.png)
 
 ### Security
 The Shopify and Klaviyo API keys are stored as environment variables (not committed to Github) and as config variables in Heroku:
