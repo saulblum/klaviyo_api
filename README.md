@@ -20,7 +20,7 @@ The API is authenticated by an `Authorization` header, whose value I will email:
 
 Without the correct header, the API will return a 403:
 
-![image](https://user-images.githubusercontent.com/52899130/126854126-47b50690-7c3b-473a-aebd-eb42228044fc.png)
+![image](https://user-images.githubusercontent.com/52899130/126854242-69fc1f1a-8a7a-4dd5-90b9-ef569508aa17.png)
 
 **Question about the Klaviyo keys**
 
