@@ -40,6 +40,7 @@ Without the correct header, the API will return a 403:
 Only the public key is needed to make the Klaviyo API calls, and the [documentation](https://help.klaviyo.com/hc/en-us/articles/115005062267-How-to-Manage-Your-Account-s-API-Keys) says, "It is safe to expose your public API key, as this key cannot be used to access data in your Klaviyo account." What would stop someone from making these "Placed Order" and "Ordered Product" calls with only the public key?
 
 ### Enhancements
-* Pass in specific order IDs to sync between Shopify and Klaviyo
-* Specify which custom order and product properties should be synced, besides the standard properties
-* Enhanced error handling if the Shopify or Klaviyo APIs throw an error
+* Have the response be asynchronous, so that if there are potentially hundreds of orders to sync, the request doesn't time out, but instead returns an ID and does the sync in the background, with another endpoint where you can check the status of a given sync based off the returned ID.
+* Pass in specific order IDs to sync between Shopify and Klaviyo.
+* Specify which custom order and product properties should be synced, besides the standard properties.
+* Enhanced error handling if the Shopify or Klaviyo APIs throw an error.
