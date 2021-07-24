@@ -10,10 +10,11 @@ class OrdersController < ApplicationController
     render json: { "orders_processed": shopify_orders.map { |order| order[:properties][:OrderId] } }
   end
 
+  # call shopify orders api and memoize results so we don't have to call api again
   def shopify_orders
     @orders ||= begin
       url = "#{SHOPIFY_BASE_URL}/admin/api/2021-07/orders.json?status=any&financial_status=paid"
-      url << "&created_at_min=#{since}" if since
+      url << "&created_at_min=#{params['since']}" if params['since']
       uri = URI(url)
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
@@ -23,6 +24,7 @@ class OrdersController < ApplicationController
       response = http.request(request)
 
       orders = JSON.parse(response.body)['orders']
+      # transform shopify format to klaviyo import format
       orders.map { |order| shopify_to_klaviyo_order(Hashie::Mash.new(order)) }
     end
   end
@@ -124,6 +126,7 @@ class OrdersController < ApplicationController
     }
   end
 
+  # transform shopify ordered item details to klaviyo ordered products format
   def order_items(order)
     order.line_items.map do |line_item|
       {
@@ -134,10 +137,6 @@ class OrdersController < ApplicationController
         "ItemPrice": line_item.price
       }
     end
-  end
-
-  def since
-    params['since']
   end
 
 end
