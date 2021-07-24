@@ -5,6 +5,8 @@ This project implements an API that does a historical export of Shopify orders a
 
 There is one endpoint, at http://saulblum-klaviyo-interview.herokuapp.com/sync-orders
 
+It takes one optional query string param `since` that adds the param `created_at_min` to the Shopify orders API call; without the param, the Shopify API will return all orders.
+
 ![image](https://user-images.githubusercontent.com/52899130/126853843-01242cb7-ac16-4fc0-835c-fb6a7f0ae90b.png)
 
 ### Security
