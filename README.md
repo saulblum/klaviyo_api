@@ -16,7 +16,7 @@ I then decided which parameters I might want to include when designing an API to
 
 I created a local Rails app with an `Orders` controller (`app/controllers/application_controller.rb`) and a `sync-orders` route, and deployed the app to Heroku.
 
-The controller first fetches a JSON block of Shopify orders, transforms the JSON to the format that Jlaviyo uses, and then calls the Klaviyo API.
+The controller first fetches a JSON block of Shopify orders, transforms the JSON to the format that Klaviyo uses, and then calls the Klaviyo API.
 
 I confirmed the API worked by looking at my Klaviyo dashboard:
 
