@@ -1,55 +1,8 @@
 require 'net/http'
 
-class RandomController < ApplicationController
+class RandomController < ActionController::API
 
   KLAVIYO_TRACK_URL = 'https://a.klaviyo.com/api/track'.freeze
-  CUSTOMERS = [
-    {
-      "email": "mike@smith.com",
-      "fname": "Mike",
-      "lname": "Smith",
-      "address": "123 Main Street",
-      "city": "Boston",
-      "state": "MA",
-      "zip": "02215"
-    },
-    {
-      "email": "dan@johnson.com",
-      "fname": "Dan",
-      "lname": "Johnson",
-      "address": "987 Any Way",
-      "city": "Brooklyn",
-      "state": "NY",
-      "zip": "11234"
-    },
-    {
-      "email": "mstone@gmail.com",
-      "fname": "Michelle",
-      "lname": "Stone",
-      "address": "456 Broadway",
-      "city": "New York",
-      "state": "NY",
-      "zip": "10003"
-    },
-    {
-      "email": "apotter@gmail.com",
-      "fname": "Amy",
-      "lname": "Potter",
-      "address": "1 El Camino Real",
-      "city": "San Mateo",
-      "state": "CA",
-      "zip": "90210"
-    },
-    {
-      "email": "saul@gmail.com",
-      "fname": "Saul",
-      "lname": "Blumenthal",
-      "address": "125 Summer St",
-      "city": "Boston",
-      "state": "MA",
-      "zip": "02111"
-    }
-  ].freeze
 
   PRODUCTS = [
     {
@@ -79,15 +32,17 @@ class RandomController < ApplicationController
   ].freeze
 
   def sync
-    count = params['count'] || 10
+    contacts = JSON.parse(File.read('app/controllers/contacts.json'))
+
+    count = (params['since'] ? (Time.now - Time.parse(params['since'])) / 86400 : 10) * rand(1..5)
     count.to_i.times do |n|
-      customer = CUSTOMERS[rand(0..CUSTOMERS.length-1)]
+      customer = Hashie::Mash.new(contacts[rand(0..contacts.length-1)])
       placed_order = rand(0..1) == 0
       event = placed_order ? "Placed Order" : "Started Checkout"
 
       now = Time.now.to_i
-      month_ago = (Time.now - 2592000).to_i
-      order_date = Time.at(rand(month_ago..now))
+      since_date = params['since'] ? Time.parse(params['since']).to_i : now - 864000
+      order_date = Time.at(rand(since_date..now))
 
       num_products = rand(1..3)
       line_items = []
@@ -111,12 +66,13 @@ class RandomController < ApplicationController
           "event": event,
           "customer_properties": {
             "$email": customer[:email],
-            "$first_name": customer[:fname],
-            "$last_name": customer[:lname],
+            "$first_name": customer[:first_name],
+            "$last_name": customer[:last_name],
             "$address1": customer[:address],
             "$city": customer[:city],
             "$region": customer[:state],
-            "$zip": customer[:zip]
+            "$zip": customer[:zip],
+            "$phone_number": customer[:phone],
           },
           "properties": {
             "$event_id": rand(100000..999999).to_s,
@@ -130,7 +86,7 @@ class RandomController < ApplicationController
       call_klaviyo_track_api(product_body)
     end
 
-    render json: { "number_processed": count }
+    render json: { "number_processed": count.to_i }
   end
 
   def call_klaviyo_track_api(body_h)
