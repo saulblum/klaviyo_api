@@ -1,6 +1,6 @@
 require 'net/http'
 
-class RandomController < ActionController::API
+class SyncController < ActionController::API
 
   KLAVIYO_TRACK_URL = 'https://a.klaviyo.com/api/track'.freeze
 
